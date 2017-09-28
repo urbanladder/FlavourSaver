@@ -20,7 +20,11 @@ module FlavourSaver
       handler = proc do |template|
         # I'd rather be caching the Runtime object ready to fire, but apparently I don't get that luxury.
         <<-SOURCE
-        FlavourSaver.evaluate((begin;#{template.source.inspect};end),self)
+          if local_assigns.key?(:data)
+            FlavourSaver.evaluate((begin;#{template.source.inspect};end), data).html_safe
+          else
+            #{template.source.inspect}.html_safe
+          end
         SOURCE
       end
       ActionView::Template.register_template_handler(:hbs, handler)
