@@ -21,9 +21,9 @@ module FlavourSaver
         # I'd rather be caching the Runtime object ready to fire, but apparently I don't get that luxury.
         <<-SOURCE
           if local_assigns.key?(:data)
-            FlavourSaver.evaluate((begin;#{template.source.inspect};end), data).html_safe
+            FlavourSaver.evaluate((begin;#{template.source.inspect};end), data)
           else
-            #{template.source.inspect}.html_safe
+            FlavourSaver.evaluate((begin;#{template.source.inspect};end), self)
           end
         SOURCE
       end
